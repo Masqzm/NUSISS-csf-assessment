@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RestaurantService } from '../restaurant.service';
 import { Menu } from '../models';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -12,15 +13,17 @@ import { Observable } from 'rxjs';
 export class MenuComponent implements OnInit {
   // Task 2
   private restaurantSvc = inject(RestaurantService)
+  private router = inject(Router)
 
   menus$!: Observable<Menu[]>
 
-  order: Menu[] = []
+  order!: Menu[]
   totalPrice: number = 0
   totalQty: number = 0
 
   ngOnInit(): void {
     this.menus$ = this.restaurantSvc.getMenuItems()
+    this.order = this.restaurantSvc.order
   }
 
   addItem(selectedItem: Menu) {
@@ -55,5 +58,13 @@ export class MenuComponent implements OnInit {
       this.totalPrice -= selectedItem.price
       this.totalQty -= 1
     }
+  }
+
+  placeOrder() {
+    // Update service
+    this.restaurantSvc.totalOrderPrice = this.totalPrice
+    this.restaurantSvc.order = this.order
+    // Switch view
+    this.router.navigate(['/order'])
   }
 }

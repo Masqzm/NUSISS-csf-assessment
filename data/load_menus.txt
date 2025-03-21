@@ -1,0 +1,2 @@
+# TODO: Task 1.1
+mongoimport --host=localhost --port=27017 --db=restaurant --collection=menus --type=json --jsonArray --file=menus.json --drop

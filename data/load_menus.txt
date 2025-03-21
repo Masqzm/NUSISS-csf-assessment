@@ -1,2 +1,6 @@
 # TODO: Task 1.1
+# Local testing
 mongoimport --host=localhost --port=27017 --db=restaurant --collection=menus --type=json --jsonArray --file=menus.json --drop
+
+# Deployment
+mongoimport --uri=<railway mongodb uri>?authSource=admin --db=restaurant --collection=menus --type=json --jsonArray --file=menus.json --drop

@@ -19,10 +19,10 @@ FROM openjdk:23-jdk AS j-build
 
 WORKDIR /src
 
-COPY .mvn .mvn
-COPY src src
-COPY mvnw .
-COPY pom.xml .
+COPY server/.mvn .mvn
+COPY server/src src
+COPY server/mvnw .
+COPY server/pom.xml .
 
 # Copy all angular app files over 
 COPY --from=ng-build /src/dist/client/browser/ src/main/resources/static/
@@ -38,12 +38,15 @@ WORKDIR /app
 
 COPY --from=j-build /src/target/server-0.0.1-SNAPSHOT.jar app.jar
 
-ENV PORT=8080
+ENV PORT=3000
 
 ENV SPRING_DATASOURCE_URL=
 ENV SPRING_DATASOURCE_USERNAME=
 ENV SPRING_DATASOURCE_PASSWORD=
 ENV SPRING_DATA_MONGODB_URI=
+
+ENV PAYMENT_URL=https://payment-service-production-a75a.up.railway.app/api/payment
+ENV PAYMENT_NRICNAME="Muhammad Hazim Bin Abdullah"
 
 EXPOSE ${PORT}
 

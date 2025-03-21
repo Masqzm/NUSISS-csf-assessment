@@ -8,21 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
 import vttp.batch5.csf.models.Menu;
+import vttp.batch5.csf.models.OrderItem;
+import vttp.batch5.csf.models.Receipt;
 
 @Repository
 public class OrdersRepository {
   @Autowired
   private MongoTemplate template;
 
-  // TODO: Task 2.2
+  // Task 2.2
   // You may change the method's signature
   // Write the native MongoDB query in the comment below
   //
@@ -60,9 +59,31 @@ public class OrdersRepository {
 		return menus;
   }
 
-  // TODO: Task 4
+  // Task 4
   // Write the native MongoDB query for your access methods in the comment below
   //
   //  Native MongoDB query here
-  
+  // db.orders.insert(<doc>)
+  public Document insertOrder(Receipt receipt, String username, double total, List<OrderItem> orderItems) {
+    Document doc = new Document();
+    doc.put("_id", receipt.getOrder_id());
+    doc.put("order_id", receipt.getOrder_id());
+    doc.put("payment_id", receipt.getPayment_id());
+    doc.put("username", username);
+    doc.put("total", total);
+    doc.put("timestamp", receipt.getTimestamp());
+    //doc.put("items", orderItems);
+    doc.put("items", orderItems.stream()
+                      .map(dItems -> {
+                        Document d = new Document();
+                        d.put("id", dItems.getId());
+                        d.put("price", dItems.getPrice());
+                        d.put("quantity", dItems.getQuantity());
+
+                        return d;
+                      })
+                      .toList());
+
+    return template.insert(doc, "orders");
+  }
 }

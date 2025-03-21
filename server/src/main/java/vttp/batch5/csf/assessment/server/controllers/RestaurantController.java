@@ -28,7 +28,7 @@ public class RestaurantController {
   @Autowired
   private RestaurantService restaurantSvc;
 
-  // TODO: Task 2.2
+  // Task 2.2
   // You may change the method's signature
   @GetMapping(path="/menu", produces=MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> getMenus() {
@@ -41,7 +41,7 @@ public class RestaurantController {
     return ResponseEntity.ok(builder.build().toString());
   }
 
-  // TODO: Task 4
+  // Task 4
   // Do not change the method's signature
   @PostMapping(path="/food_order", 
     consumes=MediaType.APPLICATION_JSON_VALUE,
@@ -117,7 +117,7 @@ public class RestaurantController {
     String response;
     
     try {
-      restaurantSvc.postPayment(payload);
+      response = restaurantSvc.postPayment(payload);
     } catch(Exception ex) {
       response = Json.createObjectBuilder()
                 .add("message", ex.getMessage())
@@ -126,6 +126,6 @@ public class RestaurantController {
       return ResponseEntity.status(500).body(response);
     }
 
-    return ResponseEntity.ok("{}");
+    return ResponseEntity.ok(response);
   }
 }

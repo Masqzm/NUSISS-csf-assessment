@@ -24,4 +24,12 @@ export interface PostPayment {
     payer: string
     payee: string
     payment: number
+    items: OrderItem[]
+}
+
+export interface Receipt {
+    orderId: string
+    paymentId: string
+    total: number
+    timestamp: number
 }

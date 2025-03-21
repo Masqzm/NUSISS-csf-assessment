@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RestaurantService } from '../restaurant.service';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { Menu, PostOrder } from '../models';
+import { Menu, PostOrder, Receipt } from '../models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -63,12 +63,23 @@ export class PlaceOrderComponent implements OnInit {
     this.restaurantSvc.postOrder(po).then(
       response => {
         // Make payment if postOrder is successful
-        this.restaurantSvc.postPayment(response.orderId, this.form.value['username'])
+        this.restaurantSvc.postPayment(response.orderId, this.form.value['username'], po.items).then(
+          paymentResp => {
+            this.restaurantSvc.receipt = paymentResp
+            // Switch view
+            this.router.navigate(['/order-success'])
+          } 
+        )
+        .catch(
+          error => {
+            alert("ERROR: " + JSON.stringify(error.error.message))
+          }
+        )
       }
     )
     .catch(
       error => {
-        console.info(JSON.stringify(error.error))
+        alert("ERROR: " + JSON.stringify(error.error.message))
       }
     )
   }

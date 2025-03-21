@@ -62,7 +62,8 @@ export class PlaceOrderComponent implements OnInit {
 
     this.restaurantSvc.postOrder(po).then(
       response => {
-        console.info(response)
+        // Make payment if postOrder is successful
+        this.restaurantSvc.postPayment(response.orderId, this.form.value['username'])
       }
     )
     .catch(

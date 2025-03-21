@@ -18,3 +18,10 @@ export interface PostOrder {
     password: string
     items: OrderItem[]
 }
+
+export interface PostPayment {
+    order_id: string
+    payer: string
+    payee: string
+    payment: number
+}

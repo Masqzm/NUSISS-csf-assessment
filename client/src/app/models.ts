@@ -6,3 +6,15 @@ export interface Menu {
     price: number
     quantity: number        // for Order
 }
+
+export interface OrderItem {
+    id: string
+    price: number
+    quantity: number
+}
+
+export interface PostOrder {
+    username: string
+    password: string
+    items: OrderItem[]
+}

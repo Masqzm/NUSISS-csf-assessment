@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RestaurantService } from '../restaurant.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Menu } from '../models';
+import { Observable, Subscription } from 'rxjs';
+import { Menu, PostOrder } from '../models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -20,6 +20,8 @@ export class PlaceOrderComponent implements OnInit {
   form!: FormGroup
   order: Menu[] = []
   totalPrice: number = 0
+
+  orderSub$!: Subscription
 
   ngOnInit(): void {
     this.form = this.createForm()
@@ -42,6 +44,31 @@ export class PlaceOrderComponent implements OnInit {
   }
 
   placeOrder() {
+    let po: PostOrder = {
+      username: this.form.value['username'],
+      password: this.form.value['password'],
+      items: []
+    } 
 
+    // Loop thru this.order and copy over its items to po.items
+    this.order.forEach(item => {
+      const orderItem = {
+        id: item.id,
+        price: item.price,
+        quantity: item.quantity
+      }
+      po.items.push(orderItem)
+    });
+
+    this.restaurantSvc.postOrder(po).then(
+      response => {
+        console.info(response)
+      }
+    )
+    .catch(
+      error => {
+        console.info(JSON.stringify(error.error))
+      }
+    )
   }
 }

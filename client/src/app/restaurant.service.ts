@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { Menu } from "./models";
+import { Menu, PostOrder } from "./models";
+import { firstValueFrom } from "rxjs";
 
 @Injectable()
 export class RestaurantService {
@@ -21,6 +22,7 @@ export class RestaurantService {
   }
 
   // TODO: Task 3.2
-
-  
+  postOrder(po: PostOrder) {
+    return firstValueFrom(this.http.post<PostOrder>('/api/food_order', po))
+  }
 }

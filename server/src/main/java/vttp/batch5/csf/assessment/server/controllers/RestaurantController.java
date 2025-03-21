@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -34,7 +35,12 @@ public class RestaurantController {
 
   // TODO: Task 4
   // Do not change the method's signature
+  @PostMapping(path="/food_order", 
+    consumes=MediaType.APPLICATION_JSON_VALUE,
+    produces=MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> postFoodOrder(@RequestBody String payload) {
+    System.out.println(payload);
+
     return ResponseEntity.ok("{}");
   }
 }

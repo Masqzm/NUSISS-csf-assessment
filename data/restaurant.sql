@@ -9,7 +9,10 @@ use restaurant;
 
 create table customers (
   username varchar(64) not null,
-  password varchar(128) not null
+  password varchar(128) not null,
+
+  -- Justification for change: To allow foreign key in place_orders table
+  PRIMARY KEY (username)
 );
 
 insert into customers(username, password) values
@@ -21,3 +24,13 @@ insert into customers(username, password) values
 
 -- TODO: Task 1.2
 -- Write your task 1.2 below
+create table place_orders (
+  order_id char(8) NOT NULL,
+  payment_id varchar(128) NOT NULL,	
+  order_date date NOT NULL,
+  total decimal(10, 2) NOT NULL,
+  username varchar(64) NOT NULL,
+  
+  PRIMARY KEY (order_id),
+  FOREIGN KEY (username) REFERENCES customers(username)
+);
